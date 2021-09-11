@@ -21,10 +21,10 @@ void prompt()
     {
         strcat(prompt, "~");
         strcat(prompt, cwd + strlen(tempHome));
-        strcat(prompt, ">");
+        strcat(prompt, "> ");
     }
     else{
-        strcat(prompt, ">");
+        strcat(prompt, "> ");
         strcat(prompt, cwd);
     }
     printf("%s %s", prompt, username);
