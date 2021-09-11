@@ -13,5 +13,10 @@
 #include <dirent.h>
 
 char cwd[100000];
+char tempHome[100000];
 char sysname[100000];
 char username[1000000];
+
+
+void init_shell();
+void prompt();

@@ -1,1 +1,6 @@
-#include <headers.h>
+#include "headers.h"
+
+int main()
+{
+    init_shell();
+}
