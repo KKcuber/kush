@@ -1,23 +1,5 @@
 #include "headers.h"
 
-int strcmp(const char *X, const char *Y)
-{
-    while (*X)
-    {
-        // if characters differ, or end of the second string is reached
-        if (*X != *Y) {
-            break;
-        }
- 
-        // move to the next pair of characters
-        X++;
-        Y++;
-    }
- 
-    // return the ASCII difference after converting `char*` to `unsigned char*`
-    return *(const unsigned char*)X - *(const unsigned char*)Y;
-}
-
 void inputLoop()
 {   
     int status = 1;
@@ -29,10 +11,11 @@ void inputLoop()
 
         // Separating the input into commands
 
-        commands[0] = strtok(line, ";\n"); 
+        commands[0] = strtok(line, ";\n"); //separating the commands
         long long numCommands = 0;
-        for(;commands[numCommands] != NULL; numCommands++)
+        while (commands[numCommands] != NULL)
         {
+            numCommands++;
             commands[numCommands] = strtok(NULL, ";\n");
         }
 
@@ -42,11 +25,12 @@ void inputLoop()
         {
             // Separating the commands into tokens
 
-            token[0] = strtok(commands[j], " \t\n");
+            token[0] = strtok(commands[j], " \t\r\n");
             long long numTokens = 0;
-            for(;token[numTokens] != NULL; numTokens++)
+            while(token[numTokens] != NULL) //Separating tokens within the command
             {
-                token[numTokens] = strtok(NULL, ";\n");
+                numTokens++;
+                token[numTokens] = strtok(NULL, " \t\r\n");
             }
 
             // Calling the respective functions according to the commands entered by the user
