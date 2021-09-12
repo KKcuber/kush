@@ -39,8 +39,8 @@ void inputLoop()
                 pwd();
             // else if(strcmp(token[0], "cd") == 0)
             //     cd(token, numTokens);
-            // else if(strcmp(token[0], "echo") == 0)
-            //     echo(token, numTokens);
+            else if(strcmp(token[0], "echo") == 0)
+                echo(numTokens, token);
             // else if(strcmp(token[0], "ls") == 0)
             //     ls(cwd, numTokens, token);
             else if (strcmp(token[0], "quit") == 0)

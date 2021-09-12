@@ -23,3 +23,4 @@ void init_shell();
 void prompt();
 void inputLoop();
 void pwd();
+void echo(int numTokens, char **token);
