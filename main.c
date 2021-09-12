@@ -3,4 +3,5 @@
 int main()
 {
     init_shell();
+    inputLoop();
 }

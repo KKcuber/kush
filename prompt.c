@@ -6,7 +6,6 @@ void init_shell()
     char* lusername = getpwuid(getuid())->pw_name;
     strcpy(username, lusername);
     gethostname(sysname, sizeof(sysname)); 
-    prompt(); 
 }
 
 void prompt()
@@ -27,5 +26,5 @@ void prompt()
         strcat(prompt, "> ");
         strcat(prompt, cwd);
     }
-    printf("%s %s", prompt, username);
+    printf("%s", prompt);
 }
