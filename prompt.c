@@ -23,8 +23,8 @@ void prompt()
         strcat(prompt, "> ");
     }
     else{
-        strcat(prompt, "> ");
         strcat(prompt, cwd);
+        strcat(prompt, "> ");
     }
     printf("%s", prompt);
 }

@@ -12,7 +12,7 @@ void inputLoop()
         // Separating the input into commands
 
         commands[0] = strtok(line, ";\n"); //separating the commands
-        long long numCommands = 0;
+        int numCommands = 0;
         while (commands[numCommands] != NULL)
         {
             numCommands++;
@@ -21,12 +21,12 @@ void inputLoop()
 
         // iterating over each command
 
-        for (long long j = 0; j < numCommands; j++)
+        for (int j = 0; j < numCommands; j++)
         {
             // Separating the commands into tokens
 
             token[0] = strtok(commands[j], " \t\r\n");
-            long long numTokens = 0;
+            int numTokens = 0;
             while(token[numTokens] != NULL) //Separating tokens within the command
             {
                 numTokens++;
@@ -37,8 +37,8 @@ void inputLoop()
 
             if(strcmp(token[0], "pwd") == 0)
                 pwd();
-            // else if(strcmp(token[0], "cd") == 0)
-            //     cd(token, numTokens);
+            else if(strcmp(token[0], "cd") == 0)
+                cd(numTokens, token);
             else if(strcmp(token[0], "echo") == 0)
                 echo(numTokens, token);
             // else if(strcmp(token[0], "ls") == 0)
