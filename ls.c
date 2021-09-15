@@ -5,7 +5,7 @@ char *checkpermissions(char *filepath)
     struct stat filedetails;
     if (stat(filepath, &filedetails) == -1)
     {
-        perror("error in ls:");
+        perror("error in ls");
         return NULL;
     }
 
@@ -30,6 +30,13 @@ char *checkpermissions(char *filepath)
     permissions[10] = '\0';
 
     return permissions;
+}
+
+int isDirectory(const char *path) {
+   struct stat statbuf;
+   if (stat(path, &statbuf) != 0)
+       return 0;
+   return S_ISDIR(statbuf.st_mode);
 }
 
 //A Filter function for scandir which checks whether a file is dotfile or not
@@ -74,47 +81,89 @@ void ls(int numTokens)
         dirlist[0] = cwd;
         index++;
     }
-
-    if(index==1)
+  
+    for(int dirIndex = 0; dirIndex<index; dirIndex++)
     {
+        if(index != 1)
+            printf("%s:\n", dirlist[dirIndex]);
+
+        if (!isDirectory(dirlist[dirIndex]))
+        {
+            const char ch = '/';
+            char * fileName = strrchr(dirlist[dirIndex], ch);
+            if(!lflag)
+            {
+                if(fileName != NULL)
+                    printf("%s\n", fileName+1);
+                else
+                    printf("%s\n", dirlist[dirIndex]);
+            }
+            else
+            {
+                char *permissions = checkpermissions(dirlist[dirIndex]);
+                struct stat filedetails;
+
+                int stat_status = stat(dirlist[dirIndex], &filedetails);
+                if (stat_status == -1)
+                {
+                    perror("error in ls");
+                }
+                int hardlink_number = filedetails.st_nlink;
+
+                //getting the owner and group names
+                char *owner = getpwuid(filedetails.st_uid)->pw_name;
+                char *group = getgrgid(filedetails.st_gid)->gr_name;
+
+                int size = filedetails.st_size;
+                char *time = (char *)malloc(100 * sizeof(char));
+                strftime(time, 100, "%b %d %H:%M", localtime(&(filedetails.st_ctime)));
+                const char ch = '/';
+                char * fileName = strrchr(dirlist[dirIndex], ch);
+                printf("%s\t%d\t%s\t%s\t%d\t%s\t%s\n", permissions, hardlink_number, owner, group, size, time, (fileName != NULL) ? fileName+1 : dirlist[dirIndex]);
+                free(time);
+                free(permissions);
+            }
+            continue;
+        }
+
         struct dirent **listOfFiles;
         int numberOfFiles = 0;
 
         if (aflag)
         {
-            numberOfFiles = scandir(dirlist[0], &listOfFiles, NULL, alphasort);
+            numberOfFiles = scandir(dirlist[dirIndex], &listOfFiles, NULL, alphasort);
         }
         else
         {
-            numberOfFiles = scandir(dirlist[0], &listOfFiles, dotFilter, alphasort);
+            numberOfFiles = scandir(dirlist[dirIndex], &listOfFiles, dotFilter, alphasort);
         }
         if (numberOfFiles == -1)
         {
-            perror("error in ls:");
+            perror("error in ls");
             return;
         }
-        //print list of files according to l_flag
+
         if (lflag)
         {
             for (int i = 0; i < numberOfFiles; i++)
             {
                 char *filepath = (char *)malloc(4096 * sizeof(char));
-                strcpy(filepath, dirlist[0]);
+                strcpy(filepath, dirlist[dirIndex]);
                 strcat(filepath, "/");
                 strcat(filepath, listOfFiles[i]->d_name);
 
-                //get file permissions
+                //getting the file permissions
                 char *permissions = checkpermissions(filepath);
                 struct stat filedetails;
 
                 int stat_status = stat(filepath, &filedetails);
                 if (stat_status == -1)
                 {
-                    perror("error in ls:");
+                    perror("error in ls");
                 }
                 int hardlink_number = filedetails.st_nlink;
 
-                //get owner and group name
+                //getting the owner and group names
                 char *owner = getpwuid(filedetails.st_uid)->pw_name;
                 char *group = getgrgid(filedetails.st_gid)->gr_name;
 
@@ -132,76 +181,10 @@ void ls(int numTokens)
         {
             for (int i = 0; i < numberOfFiles; i++)
             {
-                printf("%s\n", listOfFiles[i]->d_name);
-            }
-        }
-    }
-    
-    else
-    {
-        for(int dirIndex = 0; dirIndex<index; dirIndex++)
-        {
-            printf("%s:\n", dirlist[dirIndex]);
-
-            struct dirent **listOfFiles;
-            int numberOfFiles = 0;
-
-            if (aflag)
-            {
-                numberOfFiles = scandir(dirlist[dirIndex], &listOfFiles, NULL, alphasort);
-            }
-            else
-            {
-                numberOfFiles = scandir(dirlist[dirIndex], &listOfFiles, dotFilter, alphasort);
-            }
-            if (numberOfFiles == -1)
-            {
-                perror("error in ls:");
-                return;
-            }
-            //print list of files according to l_flag
-            if (lflag)
-            {
-                for (int i = 0; i < numberOfFiles; i++)
-                {
-                    char *filepath = (char *)malloc(4096 * sizeof(char));
-                    strcpy(filepath, dirlist[dirIndex]);
-                    strcat(filepath, "/");
-                    strcat(filepath, listOfFiles[i]->d_name);
-
-                    //get file permissions
-                    char *permissions = checkpermissions(filepath);
-                    struct stat filedetails;
-
-                    int stat_status = stat(filepath, &filedetails);
-                    if (stat_status == -1)
-                    {
-                        perror("error in ls:");
-                    }
-                    int hardlink_number = filedetails.st_nlink;
-
-                    //get owner and group name
-                    char *owner = getpwuid(filedetails.st_uid)->pw_name;
-                    char *group = getgrgid(filedetails.st_gid)->gr_name;
-
-                    int size = filedetails.st_size;
-                    char *time = (char *)malloc(100 * sizeof(char));
-                    strftime(time, 100, "%b %d %H:%M", localtime(&(filedetails.st_ctime)));
-
-                    printf("%s\t%d\t%s\t%s\t%d\t%s\t%s\n", permissions, hardlink_number, owner, group, size, time, listOfFiles[i]->d_name);
-                    free(filepath);
-                    free(time);
-                    free(permissions);
-                }
-            }
-            else
-            {
-                for (int i = 0; i < numberOfFiles; i++)
-                {
-                    printf("%s\n", listOfFiles[i]->d_name);
-                }
+                printf("%s ", listOfFiles[i]->d_name);
             }
             printf("\n");
         }
+        printf("\n");
     }
 }
