@@ -41,8 +41,8 @@ void inputLoop()
                 cd(numTokens, token);
             else if(strcmp(token[0], "echo") == 0)
                 echo(numTokens, token);
-            // else if(strcmp(token[0], "ls") == 0)
-            //     ls(cwd, numTokens, token);
+            else if(strcmp(token[0], "ls") == 0)
+                ls(numTokens);
             else if (strcmp(token[0], "quit") == 0)
                 status = 0;
         }

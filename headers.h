@@ -11,6 +11,8 @@
 #include <signal.h>
 #include <sys/stat.h>
 #include <dirent.h>
+#include <time.h>
+#include <langinfo.h>
 
 char cwd[100000];
 char tempHome[100000];
@@ -25,3 +27,4 @@ void inputLoop();
 void pwd();
 void echo(int numTokens, char **token);
 void cd (int numTokens, char** token);
+void ls(int numTokens);
