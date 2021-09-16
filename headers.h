@@ -13,6 +13,7 @@
 #include <dirent.h>
 #include <time.h>
 #include <langinfo.h>
+#include <signal.h>
 
 char cwd[100000];
 char tempHome[100000];
@@ -21,6 +22,15 @@ char username[1000000];
 char *commands[100000];
 char *token[100000];
 
+typedef struct jobs{
+    char name[10000];
+    pid_t pid;
+}job;
+
+long long job_count;
+struct jobs job_arr[100000];
+struct jobs current_fore;
+
 void init_shell();
 void prompt();
 void inputLoop();
@@ -28,3 +38,4 @@ void pwd();
 void echo(int numTokens, char **token);
 void cd (int numTokens, char** token);
 void ls(int numTokens);
+void foreground();
