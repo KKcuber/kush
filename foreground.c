@@ -10,8 +10,8 @@ void foreground()
     else if (pid == 0)
     {
         setpgid(0,0);
-        int f = execvp(token[0], token);
-        if (f < 0)
+        int ret = execvp(token[0], token);
+        if (ret < 0)
         {
             perror("Error: exec failed\n");
             printf("Command not found: %s\n", token[0]);

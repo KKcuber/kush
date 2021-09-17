@@ -4,7 +4,8 @@ void inputLoop()
 {   
     int status = 1;
     do{
-        current_fore.pid = -1;
+        bjob_count = 0;
+        signal(SIGCHLD, childHandler);
         prompt();
         char *line;
         long size = 0;
@@ -46,6 +47,8 @@ void inputLoop()
                 ls(numTokens);
             else if (strcmp(token[0], "quit") == 0)
                 status = 0;
+            else if(strcmp(token[numTokens-1], "&") == 0)
+                background(numTokens);
             else
             {
                 foreground();
