@@ -26,5 +26,5 @@ void prompt()
         strcat(prompt, cwd);
         strcat(prompt, "> ");
     }
-    printf("%s", prompt);
+    printf(CYAN "%s" RESET, prompt);
 }
