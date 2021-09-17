@@ -31,7 +31,6 @@ typedef struct jobs bjob;
 
 int bjob_count;
 bjob job_arr[100000];
-bjob current_fore;
 
 void init_shell();
 void prompt();

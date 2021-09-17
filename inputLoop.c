@@ -3,8 +3,8 @@
 void inputLoop()
 {   
     int status = 1;
+    bjob_count = 0;
     do{
-        bjob_count = 0;
         signal(SIGCHLD, childHandler);
         prompt();
         char *line;
