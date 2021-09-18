@@ -14,6 +14,7 @@
 #include <time.h>
 #include <langinfo.h>
 #include <signal.h>
+#include <stdlib.h>
 
 #define RED "\x1b[31m"
 #define GREEN "\x1b[32m"
@@ -51,3 +52,4 @@ void ls(int numTokens);
 void foreground();
 void background(int numTokens);
 void childHandler();
+void pinfo(int numTokens);

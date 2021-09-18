@@ -44,8 +44,10 @@ void inputLoop()
                 echo(numTokens, token);
             else if(strcmp(token[0], "ls") == 0)
                 ls(numTokens);
-            else if (strcmp(token[0], "quit") == 0)
+            else if (strcmp(token[0], "quit") == 0 && numTokens == 1)
                 status = 0;
+            else if(strcmp(token[0], "pinfo") == 0)
+                pinfo(numTokens);
             else if(strcmp(token[numTokens-1], "&") == 0)
                 background(numTokens);
             else
