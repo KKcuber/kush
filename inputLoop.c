@@ -41,7 +41,8 @@ void inputLoop()
                 numRepeat = atoi(token[1]);
                 for(int k = 2; k < numTokens; k++)
                 {
-                    strcpy(token[k-2],token[k]); 
+                    //strcpy(token[k-2],token[k]); 
+                    token[k-2] = token[k];
                 }
                 token[numTokens-2] = NULL;
                 numTokens = numTokens - 2;
