@@ -29,7 +29,8 @@ char sysname[100000];
 char username[1000000];
 char *commands[100000];
 char *token[100000];
-int curid;
+char prevDir[100000];
+
 
 struct jobs{
     char name[10000];

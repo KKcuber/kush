@@ -3,6 +3,7 @@
 void init_shell()
 {
     getcwd(tempHome, sizeof(tempHome));
+    getcwd(prevDir, sizeof(prevDir));
     char* lusername = getpwuid(getuid())->pw_name;
     strcpy(username, lusername);
     gethostname(sysname, sizeof(sysname)); 
