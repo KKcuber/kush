@@ -29,13 +29,16 @@ char *checkpermissions(char *filepath)
     permissions[9] = (mode & S_IXOTH) ? 'x' : '-';
     permissions[10] = '\0';
 
+    // totalBlock = statbuf.st_blocks/2;
     return permissions;
 }
 
 int isDirectory(const char *path) {
    struct stat statbuf;
    if (stat(path, &statbuf) != 0)
+   {
        return 0;
+   }
    return S_ISDIR(statbuf.st_mode);
 }
 
@@ -102,7 +105,6 @@ void ls(int numTokens)
             {
                 char *permissions = checkpermissions(dirlist[dirIndex]);
                 struct stat filedetails;
-
                 int stat_status = stat(dirlist[dirIndex], &filedetails);
                 if (stat_status == -1)
                 {
@@ -145,6 +147,18 @@ void ls(int numTokens)
 
         if (lflag)
         {
+            int totalBlocks = 0;
+            for (int i = 0; i < numberOfFiles; i++)
+            {
+                char *filepath = (char *)malloc(4096 * sizeof(char));
+                strcpy(filepath, dirlist[dirIndex]);
+                strcat(filepath, "/");
+                strcat(filepath, listOfFiles[i]->d_name);
+                struct stat filedetails;
+                stat(filepath, &filedetails);
+                totalBlocks += (filedetails.st_blocks/2);
+            }
+            printf("total %d\n", totalBlocks);
             for (int i = 0; i < numberOfFiles; i++)
             {
                 char *filepath = (char *)malloc(4096 * sizeof(char));
