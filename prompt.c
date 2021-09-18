@@ -6,6 +6,7 @@ void init_shell()
     char* lusername = getpwuid(getuid())->pw_name;
     strcpy(username, lusername);
     gethostname(sysname, sizeof(sysname)); 
+    bjob_count = 0;
 }
 
 void prompt()

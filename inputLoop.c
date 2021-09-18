@@ -3,7 +3,6 @@
 void inputLoop()
 {   
     int status = 1;
-    bjob_count = 0;
     do{
         signal(SIGCHLD, childHandler);
         prompt();

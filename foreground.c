@@ -13,7 +13,7 @@ void foreground()
         int ret = execvp(token[0], token);
         if (ret < 0)
         {
-            perror("Error: exec failed\n");
+            perror("Error: exec failed");
             printf("Command not found: %s\n", token[0]);
         }
     }
