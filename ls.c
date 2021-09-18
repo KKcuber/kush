@@ -75,8 +75,10 @@ void ls(int numTokens)
                 dirlist[index] = tempHome;
                 index++;
             }
-            dirlist[index] = token[i];
-            index++;
+            else{
+                dirlist[index] = token[i];
+                index++;
+            }
         }
     }
     if(index == 0)
