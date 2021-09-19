@@ -4,7 +4,7 @@
 
 1. Clone the repository.
 2. cd into the directory `kush`.
-3. Run the command `make kush`.
+3. Run the command `make`. (if you dont have make installed , install it using `sudo apt install make`)
 4. Run the command `./kush` to start the shell.
 5. Enter `quit` when you wish to exit the shell.
 
