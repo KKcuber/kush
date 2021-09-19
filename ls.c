@@ -11,6 +11,11 @@ char *checkpermissions(char *filepath)
 
     char *permissions;
     permissions = (char *)malloc(11 * sizeof(char));
+    if(permissions == NULL)
+    {
+        printf(RED "Malloc failed : Could not allocate memory" RESET);
+        exit(0);
+    }
     mode_t mode = filedetails.st_mode;
     if (S_ISDIR(mode))
         permissions[0] = 'd';
@@ -120,6 +125,11 @@ void ls(int numTokens)
 
                 int size = filedetails.st_size;
                 char *time = (char *)malloc(100 * sizeof(char));
+                if(time == NULL)
+                {
+                    printf(RED "Malloc failed : Could not allocate memory" RESET);
+                    exit(0);
+                }
                 strftime(time, 100, "%b %d %H:%M", localtime(&(filedetails.st_ctime)));
                 const char ch = '/';
                 char * fileName = strrchr(dirlist[dirIndex], ch);
@@ -153,6 +163,11 @@ void ls(int numTokens)
             for (int i = 0; i < numberOfFiles; i++)
             {
                 char *filepath = (char *)malloc(4096 * sizeof(char));
+                if(filepath == NULL)
+                {
+                    printf(RED "Malloc failed : Could not allocate memory" RESET);
+                    exit(0);
+                }
                 strcpy(filepath, dirlist[dirIndex]);
                 strcat(filepath, "/");
                 strcat(filepath, listOfFiles[i]->d_name);
@@ -164,6 +179,11 @@ void ls(int numTokens)
             for (int i = 0; i < numberOfFiles; i++)
             {
                 char *filepath = (char *)malloc(4096 * sizeof(char));
+                if(filepath == NULL)
+                {
+                    printf(RED "Malloc failed : Could not allocate memory" RESET);
+                    exit(0);
+                }
                 strcpy(filepath, dirlist[dirIndex]);
                 strcat(filepath, "/");
                 strcat(filepath, listOfFiles[i]->d_name);

@@ -1,5 +1,7 @@
 #include "headers.h"
 
+// this fucnction parses the file /proc/[pid]/stat to get the required values
+
 void pinfo(int numTokens)
 {
     pid_t pid;
@@ -30,6 +32,11 @@ void pinfo(int numTokens)
 
     // reading/proc/pid/stat to get required info
     FILE * procFile = fopen(procPath, "r");
+    if(procFile == NULL)
+    {
+        printf("process does not exist\n");
+        return;
+    }
     getline(&line, &size, procFile);
 
     //Separating tokens within stat
@@ -48,6 +55,7 @@ void pinfo(int numTokens)
         printf("+");
     printf("\nmemory -- %s\n", statTokens[22]);
 
+    // finding executable path
     char executablePath[100000];
     readlink(exePath, executablePath, 100000);
     executablePath[strlen(executablePath)] = '\0';
@@ -61,4 +69,5 @@ void pinfo(int numTokens)
     {
         printf("Executable Path -- %s\n", executablePath);
     }
+    fclose(procFile);
 }

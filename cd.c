@@ -10,7 +10,10 @@ void cd (int numTokens, char** token)
         return;
     }
 	else if (numTokens == 1 || strcmp(token[1], "~") == 0){
-		chdir(tempHome);
+		int err = chdir(tempHome);
+		if (err < 0){
+			perror("chdir failed");
+		}
 	}
 	else if(strcmp(token[1], "-") == 0)
 		chdir(prevDir);
