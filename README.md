@@ -11,7 +11,7 @@
 ## File Structure
 1. main.c - contains the code for the main function.
 2. inputLoop.c - contains the loop which runs the shell
-3. prompt.c - contains code to print the prompt akin to the bash shell
+3. prompt.c - contains code to print the prompt akin to the bash shell and also initialise the shell
 4. pwd.c - contains code for the pwd command
 5. cd.c - contains code for the cd command
 6. ls.c - contains code for the ls command
