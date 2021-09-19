@@ -56,7 +56,7 @@ void pinfo(int numTokens)
     printf("\nmemory -- %s\n", statTokens[22]);
 
     // finding executable path
-    char executablePath[100000];
+    char executablePath[100000] = "";
     readlink(exePath, executablePath, 100000);
     executablePath[strlen(executablePath)] = '\0';
     if(!strncmp(executablePath,tempHome, strlen(tempHome)))
