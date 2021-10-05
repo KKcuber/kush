@@ -24,47 +24,73 @@ void inputLoop()
 
         for (int j = 0; j < numCommands; j++)
         {
-            // Separating the commands into tokens
+            // Separating the command into pipes
 
-            token[0] = strtok(commands[j], " \t\r\n");
-            int numTokens = 0;
-            while(token[numTokens] != NULL) //Separating tokens within the command
+            pipes[0] = strtok(line, ";\n"); //separating the pipes
+            int numpipes = 0;
+            while (pipes[numpipes] != NULL)
             {
-                numTokens++;
-                token[numTokens] = strtok(NULL, " \t\r\n");
+                numpipes++;
+                pipes[numpipes] = strtok(NULL, ";\n");
             }
-            int numRepeat = 1;
-            // Calling the respective functions according to the commands entered by the user
-            if(strcmp(token[0], "repeat") == 0)
+
+            int fddes[2];
+            // iterating over each pipe
+
+            for (int k = 0; k < numpipes; k++)  
             {
-                if(numTokens < 3) printf("insufficient number of arguments for repeat");
-                numRepeat = atoi(token[1]);
-                for(int k = 2; k < numTokens; k++)
+                if(k != 0)
                 {
-                    //strcpy(token[k-2],token[k]); 
-                    token[k-2] = token[k];
+                    if(pipe(fddes) == -1)
+                    {
+                        perror("pipe");
+                        exit(EXIT_FAILURE);
+                    }
+                    dup2(fddes[0], STDIN_FILENO);
                 }
-                token[numTokens-2] = NULL;
-                numTokens = numTokens - 2;
-            }
-            for(int rep = 0; rep<numRepeat; rep++)
-            {
-                if(strcmp(token[0], "pwd") == 0)
-                    pwd();
-                else if(strcmp(token[0], "cd") == 0)
-                    cd(numTokens, token);
-                else if(strcmp(token[0], "echo") == 0)
-                    echo(numTokens, token);
-                else if(strcmp(token[0], "ls") == 0)
-                    ls(numTokens);
-                else if (strcmp(token[0], "quit") == 0 && numTokens == 1)
-                    status = 0;
-                else if(strcmp(token[0], "pinfo") == 0)
-                    pinfo(numTokens);
-                else if(strcmp(token[numTokens-1], "&") == 0)
-                    background(numTokens);
-                else
-                    foreground();
+
+                // Separating the commands into tokens
+                token[0] = strtok(commands[j], " \t\r\n");
+                int numTokens = 0;
+                while(token[numTokens] != NULL) //Separating tokens within the command
+                {
+                    numTokens++;
+                    token[numTokens] = strtok(NULL, " \t\r\n");
+                }
+                int numRepeat = 1;
+
+                // Calling the respective functions according to the commands entered by the user
+                if(strcmp(token[0], "repeat") == 0)
+                {
+                    if(numTokens < 3) printf("insufficient number of arguments for repeat");
+                    numRepeat = atoi(token[1]);
+                    for(int k = 2; k < numTokens; k++)
+                    {
+                        //strcpy(token[k-2],token[k]); 
+                        token[k-2] = token[k];
+                    }
+                    token[numTokens-2] = NULL;
+                    numTokens = numTokens - 2;
+                }
+                for(int rep = 0; rep<numRepeat; rep++)
+                {
+                    if(strcmp(token[0], "pwd") == 0)
+                        pwd();
+                    else if(strcmp(token[0], "cd") == 0)
+                        cd(numTokens, token);
+                    else if(strcmp(token[0], "echo") == 0)
+                        echo(numTokens, token);
+                    else if(strcmp(token[0], "ls") == 0)
+                        ls(numTokens);
+                    else if (strcmp(token[0], "quit") == 0 && numTokens == 1)
+                        status = 0;
+                    else if(strcmp(token[0], "pinfo") == 0)
+                        pinfo(numTokens);
+                    else if(strcmp(token[numTokens-1], "&") == 0)
+                        background(numTokens);
+                    else
+                        foreground();
+                }
             }
         }
     } while(status);

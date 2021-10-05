@@ -29,6 +29,7 @@ char tempHome[100000];
 char sysname[100000];
 char username[1000000];
 char *commands[100000];
+char *pipes[100000];
 char *token[100000];
 char prevDir[100000];
 
