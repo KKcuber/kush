@@ -1,5 +1,5 @@
-.pdf
-.vscode
-.gz
-.txt
-.zip
+*.pdf
+*.vscode
+*.gz
+*.txt
+*.zip
