@@ -29,14 +29,14 @@ void inputLoop()
             // Separating the command into pipes
             char * pipeSavePointer;
             pipes[0] = strtok_r(commands[j], "|", &pipeSavePointer); //separating the pipes
-            int numpipecommands = 0;
-            while (pipes[numpipecommands] != NULL)
+            int numPipeCommands = 0;
+            while (pipes[numPipeCommands] != NULL)
             {
-                numpipecommands++;
-                pipes[numpipecommands] = strtok_r(NULL, "|", &pipeSavePointer);
+                numPipeCommands++;
+                pipes[numPipeCommands] = strtok_r(NULL, "|", &pipeSavePointer);
             }
 
-            if(numpipecommands == 1)
+            if(numPipeCommands == 1)
             {
                 // if there is only one command, then we can just execute it
                 char * tokenSavePointer;
@@ -128,7 +128,7 @@ void inputLoop()
 
                 // iterating over each pipe
 
-                for (int k = 0; k < numpipecommands; k++)  
+                for (int k = 0; k < numPipeCommands; k++)  
                 {
 
                     // Separating the commands into tokens
@@ -142,7 +142,7 @@ void inputLoop()
                     }
                     int numRepeat = 1;
 
-                    if(k!=numpipecommands-1)
+                    if(k!=numPipeCommands-1)
                     {
                         if(pipe(new_fds) < 0)
                         {
@@ -153,7 +153,17 @@ void inputLoop()
                     // if the command is one of the in-built commands then we call the respective fucnction to execute it
                     if(strcmp(token[0], "pwd") == 0 || strcmp(token[0], "cd") == 0 || strcmp(token[0], "echo") == 0 || strcmp(token[0], "ls") == 0 || strcmp(token[0], "quit") == 0 || strcmp(token[0], "pinfo") == 0)
                     {
-                        
+                        // changing stdout and stdin according to position of command in pipeline
+                        if(k != 0)
+                        {
+                            dup2(old_fds[0], 0);
+                            close(old_fds[0]);
+                            close(old_fds[1]);
+                        }
+                        if(k != numPipeCommands - 1)
+                        {
+                            dup2(new_fds[1], 1);
+                        }
                         if(strcmp(token[0], "pwd") == 0)
                             pwd();
                         else if(strcmp(token[0], "cd") == 0)
@@ -166,10 +176,15 @@ void inputLoop()
                             status = 0;
                         else if(strcmp(token[0], "pinfo") == 0)
                             pinfo(numTokens);
+                        old_fds[0] = new_fds[0];
+                        old_fds[1] = new_fds[1];
+                        // resetting stdout and stdin
+                        dup2(stdout_fd, 1);
+                        dup2(stdin_fd, 0);
                     }
                     else
                     {
-                        pipeExecute(numpipecommands, new_fds, old_fds, k);
+                        pipeExecute(numPipeCommands, new_fds, old_fds, k);
                     }
                 }
                 close(old_fds[0]);
