@@ -140,7 +140,53 @@ void inputLoop()
                         numTokens++;
                         token[numTokens] = strtok_r(NULL, " \t\r\n", &tokenSavePointer);
                     }
-                    int numRepeat = 1;
+                    if(k == 0)
+                    {
+                        // checking for input redirection in first command in pipeline
+                        int tempNumTokens = numTokens;
+                        for(int t = 0;t < numTokens; t++)
+                        {
+                            if(strcmp(token[t], "<") == 0)
+                            {
+                                token[t] = NULL;
+                                int fdin = open(token[t+1], O_RDONLY);
+                                if(fdin < 0)
+                                {
+                                    perror("Error: File not found");
+                                    continue;
+                                }
+                                dup2(fdin, 0);
+                                close(fdin);
+                                tempNumTokens = tempNumTokens<t?tempNumTokens:t;
+                            }
+                        }
+                        numTokens = tempNumTokens;
+                    }
+                    if(k == numPipeCommands-1)
+                    {
+                        int tempNumTokens = numTokens;
+                        for(int t = 0;t < numTokens; t++)
+                        {
+                            // checking for output redirection in last command in pipeline
+                            if(strcmp(token[t], ">") == 0)
+                            {
+                                token[t] = NULL;
+                                int fdout = open(token[t+1], O_WRONLY | O_CREAT, 0644);
+                                dup2(fdout, 1);
+                                close(fdout);
+                                tempNumTokens = t;
+                            }
+                            else if(strcmp(token[t], ">>") == 0)
+                            {
+                                token[t] = NULL;
+                                int fdout = open(token[t+1], O_WRONLY | O_CREAT | O_APPEND, 0644);
+                                dup2(fdout, 1);
+                                close(fdout);
+                                tempNumTokens = tempNumTokens<t?tempNumTokens:t;
+                            }
+                        }
+                        numTokens = tempNumTokens;
+                    }
 
                     if(k!=numPipeCommands-1)
                     {
@@ -189,6 +235,8 @@ void inputLoop()
                 }
                 close(old_fds[0]);
                 close(old_fds[1]);
+                dup2(stdout_fd, 1);
+                dup2(stdin_fd, 0);
             }
         }
     } while(status);
