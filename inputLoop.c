@@ -13,13 +13,13 @@ void inputLoop()
         getline(&line, &size, stdin);
 
         // Separating the input into commands
-
-        commands[0] = strtok(line, ";\n"); //separating the commands
+        char *commandsSavePointer;
+        commands[0] = strtok_r(line, ";\n", &commandsSavePointer); //separating the commands
         int numCommands = 0;
         while (commands[numCommands] != NULL)
         {
             numCommands++;
-            commands[numCommands] = strtok(NULL, ";\n");
+            commands[numCommands] = strtok_r(NULL, ";\n", &commandsSavePointer);
         }
 
         // iterating over each command
@@ -27,25 +27,25 @@ void inputLoop()
         for (int j = 0; j < numCommands; j++)
         {
             // Separating the command into pipes
-
-            pipes[0] = strtok(line, "|"); //separating the pipes
+            char * pipeSavePointer;
+            pipes[0] = strtok_r(commands[j], "|", &pipeSavePointer); //separating the pipes
             int numpipecommands = 0;
             while (pipes[numpipecommands] != NULL)
             {
                 numpipecommands++;
-                pipes[numpipecommands] = strtok(NULL, ";\n");
+                pipes[numpipecommands] = strtok_r(NULL, "|", &pipeSavePointer);
             }
 
             if(numpipecommands == 1)
             {
                 // if there is only one command, then we can just execute it
-
-                token[0] = strtok(pipes[j], " \t\r\n");
+                char * tokenSavePointer;
+                token[0] = strtok_r(pipes[0], " \t\r\n", &tokenSavePointer); //separating the tokens
                 int numTokens = 0;
                 while(token[numTokens] != NULL) //Separating tokens within the command
                 {
                     numTokens++;
-                    token[numTokens] = strtok(NULL, " \t\r\n");
+                    token[numTokens] = strtok_r(NULL, " \t\r\n", &tokenSavePointer);
                 }
                 int tempNumTokens = numTokens;
                 for(int t = 0;t < numTokens; t++)
@@ -123,46 +123,37 @@ void inputLoop()
 
             else
             {
-                int fddes[2];
+                int new_fds[2];
+                int old_fds[2];
+
                 // iterating over each pipe
 
                 for (int k = 0; k < numpipecommands; k++)  
                 {
-                    if(k != 0)
-                    {
-                        if(pipe(fddes) == -1)
-                        {
-                            perror("pipe");
-                            exit(EXIT_FAILURE);
-                        }
-                        dup2(fddes[0], STDIN_FILENO);
-                    }
 
                     // Separating the commands into tokens
-                    token[0] = strtok(commands[j], " \t\r\n");
+                    char * tokenSavePointer;
+                    token[0] = strtok_r(pipes[k], " \t\r\n", &tokenSavePointer);
                     int numTokens = 0;
                     while(token[numTokens] != NULL) //Separating tokens within the command
                     {
                         numTokens++;
-                        token[numTokens] = strtok(NULL, " \t\r\n");
+                        token[numTokens] = strtok_r(NULL, " \t\r\n", &tokenSavePointer);
                     }
                     int numRepeat = 1;
 
-                    // Calling the respective functions according to the commands entered by the user
-                    if(strcmp(token[0], "repeat") == 0)
+                    if(k!=numpipecommands-1)
                     {
-                        if(numTokens < 3) printf("insufficient number of arguments for repeat");
-                        numRepeat = atoi(token[1]);
-                        for(int k = 2; k < numTokens; k++)
+                        if(pipe(new_fds) < 0)
                         {
-                            //strcpy(token[k-2],token[k]); 
-                            token[k-2] = token[k];
+                            perror("Error: pipe failed");
+                            continue;
                         }
-                        token[numTokens-2] = NULL;
-                        numTokens = numTokens - 2;
                     }
-                    for(int rep = 0; rep<numRepeat; rep++)
+                    // if the command is one of the in-built commands then we call the respective fucnction to execute it
+                    if(strcmp(token[0], "pwd") == 0 || strcmp(token[0], "cd") == 0 || strcmp(token[0], "echo") == 0 || strcmp(token[0], "ls") == 0 || strcmp(token[0], "quit") == 0 || strcmp(token[0], "pinfo") == 0)
                     {
+                        
                         if(strcmp(token[0], "pwd") == 0)
                             pwd();
                         else if(strcmp(token[0], "cd") == 0)
@@ -175,12 +166,14 @@ void inputLoop()
                             status = 0;
                         else if(strcmp(token[0], "pinfo") == 0)
                             pinfo(numTokens);
-                        else if(strcmp(token[numTokens-1], "&") == 0)
-                            background(numTokens);
-                        else
-                            foreground();
+                    }
+                    else
+                    {
+                        pipeExecute(numpipecommands, new_fds, old_fds, k);
                     }
                 }
+                close(old_fds[0]);
+                close(old_fds[1]);
             }
         }
     } while(status);
