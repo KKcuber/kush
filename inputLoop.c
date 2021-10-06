@@ -5,6 +5,8 @@ void inputLoop()
     int stdout_fd = dup(1);
     int stdin_fd = dup(0);
     int status = 1;
+    signal(SIGINT, ctrl_c);
+    signal(SIGTSTP, ctrl_z);
     do{
         signal(SIGCHLD, childHandler);
         prompt();

@@ -2,6 +2,7 @@
 
 void init_shell()
 {
+    shellpid = getpid();
     getcwd(tempHome, sizeof(tempHome));
     getcwd(prevDir, sizeof(prevDir));
     char* lusername = getpwuid(getuid())->pw_name;
