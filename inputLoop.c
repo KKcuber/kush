@@ -12,7 +12,10 @@ void inputLoop()
         prompt();
         char *line;
         long size = 0;
-        getline(&line, &size, stdin);
+        if(getline(&line, &size, stdin) == EOF)
+        {
+            exit(0);
+        };
 
         // Separating the input into commands
         char *commandsSavePointer;
