@@ -11,7 +11,10 @@ void background(int numTokens)
         token[numTokens-1] =  NULL;
         int ret = execvp(token[0], token);
         if (ret < 0)
+        {
             perror("execvp failed");
+            exit(1);
+        }
     }
     else
     {
@@ -19,6 +22,15 @@ void background(int numTokens)
         printf("%d\n", pid);
         job_arr[bjob_count].pid = pid;
         strcpy(job_arr[bjob_count].name, token[0]);
+        for(int ijob = 1; ijob < 1000; ijob++)
+        {
+            if(job_num_available[ijob] == 0)
+            {
+                job_num_available[ijob] = 1;
+                job_arr[bjob_count].job_num = ijob;
+                break;
+            }
+        }
         bjob_count++;
     }
 }

@@ -27,6 +27,7 @@ void pipeExecute(int numPipeCommands, int new_fds[], int old_fds[], int k)
         {
             perror("execvp failed");
             printf("Command not found: %s\n", token[0]);
+            exit(1);
         }
     }
     else{

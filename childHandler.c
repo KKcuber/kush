@@ -6,11 +6,21 @@ int getJobIndex(int pid)
     {
         if (job_arr[i].pid == pid)
         {
-            job_arr[i].pid = -69696969;
             return i;
         }
     }
     return -1;
+}
+
+void removeJob(int pid)
+{
+    int index = getJobIndex(pid);
+    if (index == -1)
+    {
+        return;
+    }
+    job_arr[index].pid = -69696969;
+    job_num_available[job_arr[index].job_num] = 0;
 }
 
 void childHandler()
@@ -27,11 +37,17 @@ void childHandler()
             continue;
         }
         if (WIFEXITED(status))
+        {
             printf("\n%s with pid %d exited normally\n", name, pid);
+            removeJob(pid);
+        }
         else if (WIFSTOPPED(status))
             printf("\n%s with pid %d suspended normally\n", name, pid);
         else
+        {
             printf("\n%s with pid %d exited abnormally\n", name, pid);
+            removeJob(pid);
+        }
         prompt();
         fflush(stdout);
     }

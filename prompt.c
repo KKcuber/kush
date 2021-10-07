@@ -9,6 +9,7 @@ void init_shell()
     strcpy(username, lusername);
     gethostname(sysname, sizeof(sysname)); 
     bjob_count = 0;
+    curr_foregound_job.pid = -1;
 }
 
 void prompt()

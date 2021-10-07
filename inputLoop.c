@@ -14,7 +14,7 @@ void inputLoop()
         long size = 0;
         if(getline(&line, &size, stdin) == EOF)
         {
-            exit(0);
+            exit(0); // for exiting terminal when ctrl + d is pressed(which basically inserts a EOF)
         };
 
         // Separating the input into commands
@@ -117,6 +117,20 @@ void inputLoop()
                         exit(0);
                     else if(strcmp(token[0], "pinfo") == 0)
                         pinfo(numTokens);
+                    else if(strcmp(token[0], "jobs") == 0)
+                    {
+                        jobs(numTokens);
+                    }
+                    else if(strcmp(token[0], "fg") == 0)
+                    {
+                        fg(numTokens);
+                    }
+                    else if(strcmp(token[0], "bg") == 0)
+                    {
+                        bg(numTokens);
+                    }
+                    else if(strcmp(token[0], "sig") == 0)
+                        sig(numTokens);
                     else if(strcmp(token[numTokens-1], "&") == 0)
                         background(numTokens);
                     else
@@ -227,6 +241,18 @@ void inputLoop()
                             exit(0);
                         else if(strcmp(token[0], "pinfo") == 0)
                             pinfo(numTokens);
+                        else if(strcmp(token[0], "jobs") == 0)
+                            jobs(numTokens);
+                        else if(strcmp(token[0], "fg") == 0)
+                        {
+                            fg(numTokens);
+                        }
+                        else if(strcmp(token[0], "bg") == 0)
+                        {
+                            bg(numTokens);
+                        }
+                        else if(strcmp(token[0], "sig") == 0)
+                            sig(numTokens);
                         old_fds[0] = new_fds[0];
                         old_fds[1] = new_fds[1];
                         // resetting stdout and stdin

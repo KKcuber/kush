@@ -41,12 +41,13 @@ void pinfo(int numTokens)
 
     //Separating tokens within stat
     char* statTokens[60];
-    statTokens[0] = strtok(line, " \n");
+    char* statTokensSavePtr;
+    statTokens[0] = strtok_r(line, " \n", &statTokensSavePtr);
     int index = 0;
     while(statTokens[index] != NULL)
     {
         index++;
-        statTokens[index] = strtok(NULL, " \n");
+        statTokens[index] = strtok_r(NULL, " \n", &statTokensSavePtr);
     }
 
     printf("pid -- %s\n", pidString);
