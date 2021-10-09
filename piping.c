@@ -44,10 +44,10 @@ void pipeExecute(int numPipeCommands, int new_fds[], int old_fds[], int k)
         // wait(NULL);
         signal(SIGTTOU, SIG_IGN);
         signal(SIGTTIN, SIG_IGN);
-        tcsetpgrp(0, pid);
+        //tcsetpgrp(0, pid);
         int status=0;
         waitpid(pid,&status,WUNTRACED);
-        tcsetpgrp(0, getpgrp());
+        //tcsetpgrp(0, getpgrp());
         signal(SIGTTOU, SIG_DFL);
         signal(SIGTTIN, SIG_DFL);
     }

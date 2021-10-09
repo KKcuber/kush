@@ -12,7 +12,7 @@ void foreground()
         perror("Error: Fork Failed\n");
     else if (pid == 0)
     {
-        // setpgid(0,0);
+        setpgid(0,0);
         //signal(SIGTSTP, ctrl_z);
         int ret = execvp(token[0], token);
         if (ret < 0)

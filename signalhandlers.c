@@ -56,7 +56,7 @@ void ctrl_z()
             curr_foregound_job.name[0] = '\0';
         }
     }
-    else //if(curpid == shellpid)
+    else if(curpid == shellpid)
     {
         printf("\n");
         prompt();
