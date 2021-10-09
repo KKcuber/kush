@@ -1,4 +1,5 @@
 # Kush
+A shell made in C which simulated the bash/zsh shell and supports all shell commands, piping, redirection. It also has a variety  of user built commands along with extensive signal and error handling.
 
 ## Running the Shell
 
@@ -10,7 +11,7 @@
 
 ## File Structure
 1. main.c - contains the code for the main function.
-2. inputLoop.c - contains the loop which runs the shell
+2. inputLoop.c - contains the loop which runs the shell including logic for piping and redirection
 3. prompt.c - contains code to print the prompt akin to the bash shell and also initialise the shell
 4. pwd.c - contains code for the pwd command
 5. cd.c - contains code for the cd command
@@ -21,4 +22,12 @@
 10. background.c - contains code for the executing background processes
 11. childHandler.c - contains code for handling the signal when the child process exits
 12. headers.h - contains all the function declarations, global variables, macros and headers required by the shell
-13. makefile - contains code for the makefile
+13. jobs.c - contains all the code for the job command
+14. sig.c - contains the code for fg, bg, sig.
+15. signalhandlers.c - contains code for handling signals such as ctrl + c, ctrl + z.
+16. replay.c - contains code for the bonus command replay which gives the user fucnctionlity to repeatedly execute a command after specific intervals of time.
+
+**^^BONUS COMMAND ALSO IMPLEMENTED^^ - replay**
+
+17. piping.c - contains code for executing commands using execvp which have pipes.
+18. makefile - contains code for the makefile
