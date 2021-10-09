@@ -29,7 +29,10 @@ void ctrl_z()
         for(int ijob = 0; ijob < 100; ijob++)
         {
             if(curr_foregound_job.pid == job_arr[ijob].pid)
+            {
                 exists = 1;
+                break;
+            }
         }
         if(!exists)
         {
@@ -48,8 +51,12 @@ void ctrl_z()
             curr_foregound_job.pid = -1;
             curr_foregound_job.name[0] = '\0';
         }
+        else{
+            curr_foregound_job.pid = -1;
+            curr_foregound_job.name[0] = '\0';
+        }
     }
-    else if(curpid == shellpid)
+    else //if(curpid == shellpid)
     {
         printf("\n");
         prompt();
