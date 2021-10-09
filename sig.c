@@ -91,13 +91,13 @@ void fg(int numTokens)
     curr_foregound_job.job_num = 0;
     curr_foregound_job.pid = pid;
     strcpy(curr_foregound_job.name,job_arr[jobIndex].name);
-    // signal(SIGTTOU, SIG_IGN);
-    // signal(SIGTTIN, SIG_IGN);
+    signal(SIGTTOU, SIG_IGN);
+    signal(SIGTTIN, SIG_IGN);
     kill(pid, SIGCONT);
     int status=0;
     waitpid(pid,&status,WUNTRACED);
-    // signal(SIGTTOU, SIG_DFL);
-    // signal(SIGTTIN, SIG_DFL);
+    signal(SIGTTOU, SIG_DFL);
+    signal(SIGTTIN, SIG_DFL);
     if(!WIFSTOPPED(status))
     {
         removeJob2(pid);
