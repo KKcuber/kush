@@ -15,6 +15,7 @@
 #include <langinfo.h>
 #include <signal.h>
 #include <stdlib.h>
+#include <ctype.h>
 
 #define RED "\x1b[31m"
 #define GREEN "\x1b[32m"
@@ -66,3 +67,4 @@ void sig(int numTokens);
 void bg(int numTokens);
 void fg(int numTokens);
 int getJobIndex_givenPid(int pid);
+void replay(int numTokens);

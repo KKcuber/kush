@@ -118,19 +118,15 @@ void inputLoop()
                     else if(strcmp(token[0], "pinfo") == 0)
                         pinfo(numTokens);
                     else if(strcmp(token[0], "jobs") == 0)
-                    {
                         jobs(numTokens);
-                    }
                     else if(strcmp(token[0], "fg") == 0)
-                    {
                         fg(numTokens);
-                    }
                     else if(strcmp(token[0], "bg") == 0)
-                    {
                         bg(numTokens);
-                    }
                     else if(strcmp(token[0], "sig") == 0)
                         sig(numTokens);
+                    else if(strcmp(token[0], "replay") == 0)
+                        replay(numTokens);
                     else if(strcmp(token[numTokens-1], "&") == 0)
                         background(numTokens);
                     else
