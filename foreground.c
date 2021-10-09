@@ -24,14 +24,14 @@ void foreground()
     }
     else
     {
-        // signal(SIGTTOU, SIG_IGN);
-        // signal(SIGTTIN, SIG_IGN);
+        signal(SIGTTOU, SIG_IGN);
+        signal(SIGTTIN, SIG_IGN);
         // tcsetpgrp(0, pid);
         int status=0;
         waitpid(pid,&status,WUNTRACED);
         // tcsetpgrp(0, getpgrp());
-        // signal(SIGTTOU, SIG_DFL);
-        // signal(SIGTTIN, SIG_DFL);
+        signal(SIGTTOU, SIG_DFL);
+        signal(SIGTTIN, SIG_DFL);
         curr_foregound_job.pid = -1;
         curr_foregound_job.name[0] = '\0';
         // wait(NULL);
