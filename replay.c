@@ -134,4 +134,5 @@ void replay(int numTokens)
         sleep(toAdd);
         executeCommand(numTokens);
     }
+    sleep(period%toAdd);
 }
